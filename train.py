@@ -1,13 +1,19 @@
 import numpy as np
-from model import Linear
+from sklearn.datasets import make_moons
+from model import NeuralNetwork
 
-X = np.random.randn(500, 2)
+X, y = make_moons(
+  n_samples=500,
+  noise=0.2,
+  random_state=42
+)
 
-layer = Linear(2,4)
+model = NeuralNetwork()
 
-output = layer.forward(X)
+output = model.forward(X)
 
-print("Input shape :", X.shape)
-print("Weight shape :", layer.W.shape)
-print("Bias shape :", layer.b.shape)
 print("Output shape :", output.shape)
+print(output[:5])
+
+
+
