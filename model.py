@@ -3,6 +3,10 @@ import numpy as np
 def relu(x):
   return np.maximum(0, x)
 
+def softmax(X):
+  X = np.exp(X)
+  return X / np.sum(X, axis=1, keepdims=True)
+
 class NeuralNetwork:
   def __init__(self):
     self.Linear1 = Linear(2, 16)
