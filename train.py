@@ -1,19 +1,14 @@
 import numpy as np
 from sklearn.datasets import make_moons
-from model import NeuralNetwork
+from model import softmax
 
-X, y = make_moons(
-  n_samples=500,
-  noise=0.2,
-  random_state=42
-)
+X = np.array([
+     [2,1],
+     [3,5]])
 
-model = NeuralNetwork()
+result = softmax(X)
 
-output = model.forward(X)
-
-print("Output shape :", output.shape)
-print(output[:5])
+print(result)
 
 
 
