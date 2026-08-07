@@ -24,3 +24,6 @@ Converted output logits into normalized probability distributions
 Learned row-wise operations using axis=1 and keepdims=True
 Verified probability outputs sum to 1 for every sample
 Completed the inference pipeline for a feedforward neural network
+
+### Progress 5
+- Improved Softmax with a numerically stable implementation by subtracting the row-wise maximum before exponentiation to prevent overflow.
