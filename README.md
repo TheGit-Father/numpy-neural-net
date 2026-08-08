@@ -33,3 +33,6 @@ Completed the inference pipeline for a feedforward neural network
 
 ### Progress 7
 - Connected the neural network's forward pass, numerically stable Softmax, and cross-entropy loss to the 500-sample make_moons dataset.
+
+### Progress 8
+- Added numerical stability to cross-entropy loss using probability clipping to prevent `log(0)`.
