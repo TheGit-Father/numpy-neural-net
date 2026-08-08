@@ -1,15 +1,15 @@
 import numpy as np
 from sklearn.datasets import make_moons
-from model import cross_entropy
+from model import NeuralNetwork
 
-predictions = np.array([[0.8, 0.2],
-                        [0.1, 0.9],
-                        [0.7, 0.3],
-                        [0.4, 0.6]])
+X,y = make_moons(
+  n_samples = 500,
+  noise = 0.2,
+  random_state = 42
+)
 
-labels = np.array([0, 1, 0, 1])
-
-loss = cross_entropy(predictions, labels)
+model = NeuralNetwork()
+loss = model.loss(X, y)
 
 print("Loss :", loss)
 
