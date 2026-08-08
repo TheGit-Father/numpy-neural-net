@@ -1,14 +1,17 @@
 import numpy as np
 from sklearn.datasets import make_moons
-from model import softmax
+from model import cross_entropy
 
-X = np.array([
-     [2,1],
-     [3,5]])
+predictions = np.array([[0.8, 0.2],
+                        [0.1, 0.9],
+                        [0.7, 0.3],
+                        [0.4, 0.6]])
 
-result = softmax(X)
+labels = np.array([0, 1, 0, 1])
 
-print(result)
+loss = cross_entropy(predictions, labels)
+
+print("Loss :", loss)
 
 
 
