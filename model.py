@@ -11,6 +11,7 @@ def softmax(X):
 def cross_entropy(predictions, labels):
   n = len(labels)
   correct_probs = predictions[np.arange(n), labels]
+  correct_probs = np.clip(correct_probs, 1e-15, 1.0)
   losses = - np.log(correct_probs)
   return  np.mean(losses)
 
