@@ -30,3 +30,6 @@ Completed the inference pipeline for a feedforward neural network
 
 ### Progress 6
 - Implemented cross-entropy loss to measure classification error from predicted class probabilities.
+
+### Progress 7
+- Connected the neural network's forward pass, numerically stable Softmax, and cross-entropy loss to the 500-sample make_moons dataset.
