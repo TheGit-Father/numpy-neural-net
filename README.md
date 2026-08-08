@@ -27,3 +27,6 @@ Completed the inference pipeline for a feedforward neural network
 
 ### Progress 5
 - Improved Softmax with a numerically stable implementation by subtracting the row-wise maximum before exponentiation to prevent overflow.
+
+### Progress 6
+- Implemented cross-entropy loss to measure classification error from predicted class probabilities.
