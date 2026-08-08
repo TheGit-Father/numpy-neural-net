@@ -4,9 +4,9 @@ def relu(x):
   return np.maximum(0, x)
 
 def softmax(X):
-  X = np.max(X, axis=1, keepdims=True)
-  X = np.exp(X)
-  return X / np.sum(X, axis=1, keepdims=True)
+  X = X - np.max(X, axis=1, keepdims=True)
+  exp = np.exp(X)
+  return exp / np.sum(exp, axis=1, keepdims=True)
 
 def cross_entropy(predictions, labels):
   n = len(labels)
@@ -20,12 +20,19 @@ class NeuralNetwork:
     self.Linear1 = Linear(2, 16)
     self.Linear2 = Linear(16, 2)
 
-
   def forward(self, x):
     z1 = self.Linear1.forward(x)
     a1 = relu(z1)
     z2 = self.Linear2.forward(a1)
     return z2
+
+  def loss(self, X, y):
+    logits = self.forward(X)
+    probabilities = softmax(logits)
+    print("Logits shape :", logits.shape)
+    print("Probab shape :", probabilities.shape)
+    print("Labels shape :", y.shape)
+    return cross_entropy(probabilities, y)
 
 class Linear:
   def __init__(self, in_features, out_features):
