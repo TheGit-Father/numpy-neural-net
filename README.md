@@ -42,3 +42,6 @@ Implemented backpropagation for the two-layer neural network, computing gradient
 
 ### Progress 10
 - Added gradient descent parameter updates and a training loop, allowing the neural network to learn on the `make_moons` dataset.
+
+### Progress 11
+- Added a matplotlib decision boundary visualization to evaluate the trained neural network on the `make_moons` dataset.
