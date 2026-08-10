@@ -1,17 +1,18 @@
-import numpy as np
-from sklearn.datasets import make_moons
+from dataset import X,y
+print("X shape :", X.shape)
+print("y shape :", y.shape)
 from model import NeuralNetwork
-
-X,y = make_moons(
-  n_samples = 500,
-  noise = 0.2,
-  random_state = 42
-)
+from model import softmax
 
 model = NeuralNetwork()
+logits = model.forward(X)
+probabilities = softmax(logits)
+
 loss = model.loss(X, y)
 
 print("Loss :", loss)
+
+model.backward(probabilities, y)
 
 
 
