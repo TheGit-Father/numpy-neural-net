@@ -39,3 +39,6 @@ Completed the inference pipeline for a feedforward neural network
 
 ### Progress 9
 Implemented backpropagation for the two-layer neural network, computing gradients for weights and biases through the output layer, ReLU activation, and hidden layer.
+
+### Progress 10
+- Added gradient descent parameter updates and a training loop, allowing the neural network to learn on the `make_moons` dataset.
