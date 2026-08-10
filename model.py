@@ -22,18 +22,26 @@ class NeuralNetwork:
     self.Linear2 = Linear(16, 2)
 
   def forward(self, x):
-    z1 = self.Linear1.forward(x)
-    a1 = relu(z1)
+    self.z1 = self.Linear1.forward(x)
+    a1 = relu(self.z1)
     z2 = self.Linear2.forward(a1)
     return z2
 
   def loss(self, X, y):
     logits = self.forward(X)
     probabilities = softmax(logits)
-    print("Logits shape :", logits.shape)
-    print("Probab shape :", probabilities.shape)
-    print("Labels shape :", y.shape)
     return cross_entropy(probabilities, y)
+
+  def backward(self, probabilities, y):
+    Y = np.zeros_like(probabilities)
+    Y[np.arange(len(y)), y] = 1
+
+    dz2 = (probabilities - Y) / len(y)
+    dw2, db2, da1 = self.Linear2.backward(dz2)
+    dz1 = da1 * (self.z1 > 0)
+    dw1, db1, dX = self.Linear1.backward(dz1)
+    return dw1, db1, dw2, db2
+
 
 class Linear:
   def __init__(self, in_features, out_features):
@@ -41,5 +49,12 @@ class Linear:
     self.b = np.zeros(out_features)
 
   def forward(self, X):
+    self.input = X
     return X @ self.W + self.b
+
+  def backward(self, dz):
+    dW = self.input.T @ dz
+    db = np.sum(dz, axis=0, keepdims=True)
+    dX = dz @ self.W.T
+    return dW, db, dX
 
