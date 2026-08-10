@@ -36,3 +36,6 @@ Completed the inference pipeline for a feedforward neural network
 
 ### Progress 8
 - Added numerical stability to cross-entropy loss using probability clipping to prevent `log(0)`.
+
+### Progress 9
+Implemented backpropagation for the two-layer neural network, computing gradients for weights and biases through the output layer, ReLU activation, and hidden layer.
