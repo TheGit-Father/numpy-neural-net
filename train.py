@@ -30,4 +30,29 @@ for epoch in range(epochs):
     print(f"Accuracy: {accuracy * 100:.2f}%")
 
 
+import matplotlib.pyplot as plt
+
+x_min, x_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
+y_min, y_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
+
+xx, yy = np.meshgrid(
+    np.linspace(x_min, x_max, 200),
+    np.linspace(y_min, y_max, 200)
+)
+
+grid = np.c_[xx.ravel(), yy.ravel()]
+
+grid_predictions = model.predict(grid)
+
+grid_predictions = grid_predictions.reshape(xx.shape)
+
+plt.contourf(xx, yy, grid_predictions, alpha=0.3)
+plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors="k")
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("Neural Network Decision Boundary")
+plt.show()
+
+
 
