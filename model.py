@@ -18,8 +18,8 @@ def cross_entropy(predictions, labels):
 
 class NeuralNetwork:
   def __init__(self):
-    self.Linear1 = Linear(2, 16)
-    self.Linear2 = Linear(16, 2)
+    self.Linear1 = Linear(784, 128)
+    self.Linear2 = Linear(128, 10)
 
   def forward(self, x):
     self.z1 = self.Linear1.forward(x)
@@ -55,7 +55,7 @@ class NeuralNetwork:
 
 class Linear:
   def __init__(self, in_features, out_features):
-    self.W = np.random.randn(in_features, out_features)
+    self.W = np.random.randn(in_features, out_features) * np.sqrt(2/in_features)
     self.b = np.zeros(out_features)
 
   def forward(self, X):
