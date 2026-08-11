@@ -1,4 +1,4 @@
-from dataset import X,y
+from dataset import X_train, y_train, X_test, y_test
 from model import NeuralNetwork
 from model import softmax
 import numpy as np
@@ -6,53 +6,45 @@ import numpy as np
 model = NeuralNetwork()
 
 learning_rate = 0.01
-epochs = 1000
+epochs = 200
 
 for epoch in range(epochs):
+
   #Forward pass
-  logits = model.forward(X)
+  logits = model.forward(X_train)
   probabilities = softmax(logits)
 
-  #Loss
-  loss = model.loss(X,y)
+  #Loss using already-computed probabilities
+  correct_probs = probabilities[np.arange(len(y_train)), y_train]
+  correct_probs = np.clip(correct_probs, 1e-25, 1.0)
+  loss = -np.mean(np.log(correct_probs))
 
   #Backward Pass
-  dW1, db1, dW2, db2 = model.backward(probabilities, y)
+  dW1, db1, dW2, db2 = model.backward(probabilities, y_train)
 
   #Update parameters
   model.update(dW1, db1, dW2, db2, learning_rate)
 
-  if epoch % 100 == 0:
-    print(f"Epoch {epoch}, Loss: {loss:.4f}")
+  if epoch % 10 == 0:
+    predictions = np.argmax(probabilities, axis=1)
+    accuracy = np.mean(predictions == y_train)
 
-    predictions = model.predict(X)
-    accuracy = np.mean(predictions == y)
-    print(f"Accuracy: {accuracy * 100:.2f}%")
+    print(
+      f"Epoch {epoch}, "
+      f"Loss: {loss:.4f}, "
+      f"Accuracy: {accuracy * 100:.2f}%"
+      )
 
 
-import matplotlib.pyplot as plt
+# Final evaluation on the unseen test set
 
-x_min, x_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
-y_min, y_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
+test_logits = model.forward(X_test)
+test_probabilities = softmax(test_logits)
 
-xx, yy = np.meshgrid(
-    np.linspace(x_min, x_max, 200),
-    np.linspace(y_min, y_max, 200)
-)
+test_predictions = np.argmax(test_probabilities, axis=1)
 
-grid = np.c_[xx.ravel(), yy.ravel()]
+test_accuracy = np.mean(test_predictions == y_test)
 
-grid_predictions = model.predict(grid)
-
-grid_predictions = grid_predictions.reshape(xx.shape)
-
-plt.contourf(xx, yy, grid_predictions, alpha=0.3)
-plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors="k")
-
-plt.xlabel("Feature 1")
-plt.ylabel("Feature 2")
-plt.title("Neural Network Decision Boundary")
-plt.show()
-
+print(f"Test Accuracy: {test_accuracy * 100:.2f}%")
 
 
