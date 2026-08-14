@@ -1,47 +1,57 @@
-### Development Log
+# NumPy Neural Net
 
-### Progress 1
-Loaded the make_moons dataset using scikit-learn
-Explored dataset structure and feature-label shapes
-Visualized the non-linearly separable dataset
+A feedforward neural network built from scratch using only NumPy — no PyTorch, no TensorFlow, no autograd library. Manual forward pass, manual backpropagation, manual gradient descent, trained on MNIST.
 
-### Progress 2
-Implemented a fully vectorized Linear layer using NumPy
-Initialized weight matrices and bias vectors
-Verified matrix multiplication and output dimensions
-Introduced batched forward propagation with X @ W + b
+Reaches **78.6% test accuracy** after 200 epochs of full-batch gradient descent (still improving — loss was dropping steadily at cutoff, not yet converged).
 
-### Progress 3
-Built a fully vectorized two-layer neural network
-Added a hidden layer with ReLU activation
-Implemented the complete forward pass using NumPy
-Verified output dimensions on the make_moons dataset
-Produced raw logits for binary classification
 
-#### Progress 4
-Implemented the Softmax activation function using NumPy
-Converted output logits into normalized probability distributions
-Learned row-wise operations using axis=1 and keepdims=True
-Verified probability outputs sum to 1 for every sample
-Completed the inference pipeline for a feedforward neural network
+## Results
 
-### Progress 5
-- Improved Softmax with a numerically stable implementation by subtracting the row-wise maximum before exponentiation to prevent overflow.
+| Metric | Value |
+|---|---|
+| Dataset | MNIST (60,000 train / 10,000 test) |
+| Architecture | 784 → 128 (ReLU) → 10 (Softmax) |
+| Epochs | 200, full-batch |
+| Learning rate | 0.01 |
+| Final train accuracy | 77.10% |
+| Final test accuracy | **78.60%** |
+| Final train loss | 1.1528 (cross-entropy) |
 
-### Progress 6
-- Implemented cross-entropy loss to measure classification error from predicted class probabilities.
 
-### Progress 7
-- Connected the neural network's forward pass, numerically stable Softmax, and cross-entropy loss to the 500-sample make_moons dataset.
+## Structure
 
-### Progress 8
-- Added numerical stability to cross-entropy loss using probability clipping to prevent `log(0)`.
+```
+dataset.py  — loads and normalizes MNIST via fetch_openml, standard 60k/10k split
+model.py    — Linear layer, ReLU, numerically-stable Softmax, cross-entropy loss,
+              full manual forward/backward pass for a 2-layer network
+train.py    — training loop: forward, loss, backward, gradient descent update,
+              logs loss/accuracy every 10 epochs, evaluates on held-out test set
+```
 
-### Progress 9
-Implemented backpropagation for the two-layer neural network, computing gradients for weights and biases through the output layer, ReLU activation, and hidden layer.
 
-### Progress 10
-- Added gradient descent parameter updates and a training loop, allowing the neural network to learn on the `make_moons` dataset.
+## How it works
 
-### Progress 11
-- Added a matplotlib decision boundary visualization to evaluate the trained neural network on the `make_moons` dataset.
+- **`Linear`** stores its own weight matrix and bias, does `X @ W + b` on the forward pass, and computes `dW`, `db`, and `dX` on the backward pass from the incoming gradient.
+- **Forward pass**: `Linear1 → ReLU → Linear2 → Softmax`, producing class probabilities for each sample.
+- **Loss**: cross-entropy on the correct-class probability, clipped to avoid `log(0)`.
+- **Backward pass**: gradient of softmax + cross-entropy simplifies to `(probabilities - one_hot_labels) / n`; this is backpropagated through `Linear2`, masked by the ReLU derivative, then through `Linear1`.
+- **Update**: vanilla gradient descent — no momentum, no Adam, no learning rate schedule.
+
+
+## Milestones
+
+- Loaded and visualized the `make_moons` dataset; explored feature/label shapes on a non-linearly separable toy problem
+- Built a fully vectorized `Linear` layer in NumPy (`X @ W + b`), verified output dimensions
+- Built a two-layer network with ReLU, producing raw logits for binary classification
+- Implemented Softmax, verified row-wise outputs sum to 1
+- Made Softmax numerically stable (subtract row-wise max before exponentiation)
+- Implemented cross-entropy loss with probability clipping to avoid `log(0)`
+- Implemented full backpropagation through both layers by hand
+- Added the gradient descent training loop and a decision-boundary visualization on `make_moons`
+- Ported the network to MNIST: `dataset.py` for loading/normalizing, full training and evaluation pipeline in `train.py`
+
+
+## Next steps
+
+- Train longer / raise the learning rate — loss curve had not plateaued at epoch 200
+- Mini-batch instead of full-batch gradient descent
